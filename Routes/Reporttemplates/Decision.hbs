@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>PDF Result Template</title>
+    <style>
+        .logo {
+            height: 130px;
+            width: 170px;
+        }
+
+        .space {
+            line-height: 1.6;
+        }
+
+        .img-container {
+            text-align: center;
+            display: block;
+        }
+
+        .headings {
+            text-align: center;
+        }
+
+        .Container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        h6 {
+            padding: 5px;
+            margin: 0;
+        }
+
+        .customers {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .customers td,
+        .customers th {
+            padding: 8px;
+        }
+
+        .customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .customers th {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            text-align: left;
+            color: black;
+        }
+
+        .headercolun {
+            width: 200px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Container">
+        {{!-- <span class="img-container">
+            <img class="logo" src="{{ LogoPath }}" alt="" />
+        </span> --}}
+        <H6 class="headings">REPUBLIC OF KENYA</H6>
+        <H6 class="headings">PUBLIC PROCUREMENT ADMINISTRATIVE REVIEW BOARD</H6>
+        <H6 class="headings">DECISION SUMMARY FOR APPLICATION NO {{ Applicationno }} OF {{FilingDate}}</H6>
+        <H6 class="headings">BETWEEN </H6>
+        <H6 class="headings">BETWEEN {{ ApplicantName }}..........APPLICANT</H6>
+        <H6 class="headings"> AND </H6>
+        <H6 class="headings"> {{ PEName }} ...........PROCURING ENTITY </H6>
+{{!-- 
+
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>Application</th>
+        </table>
+        <table class="customers">
+
+
+            <tr>
+                <td>
+                    Date of Notification of Award/Occurrence of Breach:
+                </td>
+                <td>{{ AwardDate }}</td>
+            </tr>
+            <tr>
+                <td>
+                    Decision Date:
+                </td>
+                <td>{{ DecisionDate }}</td>
+            </tr>
+            <tr>
+                <td>
+                    TenderName:
+                </td>
+                <td>{{ TenderName }}</td>
+            </tr>
+            <tr>
+                <td>
+                    TenderNo:
+                </td>
+                <td>{{ TenderNo }}</td>
+            </tr>
+            <tr>
+                <td>
+                    TenderType:
+                </td>
+                <td>{{ TenderType }}</td>
+            </tr>
+            <tr>
+                <td>
+                    TenderValue:
+                </td>
+                <td>{{ TenderValue }}</td>
+            </tr>
+        </table> --}}
+
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>Board Members</th>
+        </table>
+        <table>
+
+            {{#each Boardmembers}}
+            <tr>
+                <td>{{ ID }}.&nbsp;</td>
+                <td>
+                    {{ Name }}
+                </td>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp; -{{ Role }}
+                </td>
+                <td></td>
+
+            </tr>
+            {{/each}}
+        </table>
+
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th><u>PRESENT BY INVITATION</u></th>
+        </table>
+        <table>
+            {{#group ApplicantAtt by="Date"}}
+            <table class="customers" cellpadding="0" cellspacing="0">
+                <th>Applicant</th>
+            </table>
+            <b style="margin-left: 15px;">Date:&nbsp; {{ value }}</b>&nbsp;&nbsp;
+            {{#group items by="venue"}}
+            <b>Venue:&nbsp;{{ value }}</b>
+            <ol>
+                {{#each items}}
+                <li style="margin-left: 2px;">{{ Name }} &nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp; -{{ FirmFrom }}</li>
+
+                {{/each}}
+            </ol>
+            {{/group}}
+            {{/group}}
+        </table>
+        <table>
+            {{#group PPRAAtt by="Date"}}
+            <table class="customers" cellpadding="0" cellspacing="0">
+                <th>PROCURING ENTITY</th>
+            </table>
+            <b style="margin-left: 15px;">Date:&nbsp; {{ value }}</b>&nbsp;&nbsp;
+            {{#group items by="venue"}}
+            <b>Venue:&nbsp;{{ value }}</b>
+            <ol>
+                {{#each items}}
+                <li style="margin-left: 2px;">{{ Name }} &nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp; -{{ FirmFrom }}</li>
+
+                {{/each}}
+            </ol>
+            {{/group}}
+            {{/group}}
+        </table>
+        <table>
+            {{#group InterestedPartyAtt by="Date"}}
+            <table class="customers" cellpadding="0" cellspacing="0">
+                <th>INTERESTED PARTIES</th>
+            </table>
+            <b style="margin-left: 15px;">Date:&nbsp; {{ value }}</b>&nbsp;&nbsp;
+            {{#group items by="venue"}}
+            <b>Venue:&nbsp;{{ value }}</b>
+            <ol>
+                {{#each items}}
+                <li style="margin-left: 2px;">{{ Name }} &nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp; -{{ FirmFrom }}</li>
+                {{/each}}
+            </ol>
+            {{/group}}
+            {{/group}}
+        </table>
+
+
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>Background </th>
+            <tr>
+                <td>
+                    {{{ BackgroundInformation }}}
+                </td>
+            </tr>
+        </table>
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>THE REQUEST FOR REVIEW </th>
+            <tr>
+                <td>
+                    {{{ REQUESTFORREVIEW }}}
+                </td>
+            </tr>
+        </table>
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>Parties Submissions</th>
+        </table>
+        <table class="customers">
+
+            {{#each PartiesSubmissions}}
+            <th>{{ Party }}</th>
+            <tr>
+                <td>
+                    {{{ Description }}}
+                </td>
+
+            </tr>
+            {{/each}}
+        </table>
+        <br />
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>Issues for Determinations</th>
+        </table>
+        <table class="customers">
+
+            {{#each Issues}}
+            <tr>
+                <td>{{ NO }}</td>
+
+                <td>
+                    {{{ Description }}}
+                </td>
+
+            </tr>
+            {{/each}}
+        </table>
+        <br />
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>Findings on Issues</th>
+        </table>
+        <table class="customers">
+
+            {{#each Findings}}
+            <tr>
+                <td>{{ NO }}</td>
+
+                <td>
+                    {{{ Description }}}
+                </td>
+
+            </tr>
+            {{/each}}
+        </table>
+        <br />
+
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>Holding</th>
+            <tr>
+                <td>
+                    {{{ DecisionSummary }}}
+                </td>
+            </tr>
+        </table>
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>Orders</th>
+        </table>
+        <table class="customers">
+
+            {{#each Orders}}
+            <tr>
+                <td>{{ NO }}</td>
+                <td>
+                    {{{ Description }}}
+                </td>
+
+            </tr>
+            {{/each}}
+        </table>
+
+
+
+
+    </div>
+</body>
+
+</html>

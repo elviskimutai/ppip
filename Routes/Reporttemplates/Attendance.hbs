@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>PDF Result Template</title>
+    <style>
+        .logo {
+            height: 130px;
+            width: 170px;
+        }
+
+        .space {
+            line-height: 1.6;
+        }
+
+        .img-container {
+            text-align: center;
+            display: block;
+        }
+
+        .headings {
+            text-align: center;
+        }
+
+
+
+        .Container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        h6 {
+            padding: 5px;
+            margin: 0
+        }
+
+
+
+
+
+
+
+        .customers {
+
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .customers td,
+        .customers th {
+
+            padding: 8px;
+        }
+
+        .customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .customers th {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Container">
+        {{!-- <span class="img-container">
+            <img class="logo" src="{{ LogoPath }}" alt="" />
+        </span> --}}
+        <H6 class="headings">REPUBLIC OF KENYA</H6>
+        <H6 class="headings">PUBLIC PROCUREMENT ADMINISTRATIVEREVIEW BOARD</H6>
+        <H6 class="headings">ATTENDANCE LIST FOR APPLICATION NO {{ Applicationno }}</H6>
+        <H6 class="headings">BETWEEN {{ApplicantName }} AND {{ PEName }} </H6>
+        <H6 class="headings">HEARING HELD ON {{ Date }} AT {{ Location }} </H6>
+
+        <table class="customers" cellpadding="0" cellspacing="0">
+            <th>NO</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>IDNO</th>
+            <th>Designation</th>
+            <th>FirmFrom</th>
+            {{#each Members}}
+
+            <tr>
+                <td>{{ID}}.</td>
+                <td>
+                    {{ Name }}
+                </td>
+                <td>{{ Email }}</td>
+                <td>{{ MobileNo }}</td>
+                <td>{{ IDNO }}</td>
+                <td>{{ Designation }}</td>
+                <td>{{ FirmFrom }}</td>
+            </tr>
+            {{/each}}
+        </table>
+
+
+    </div>
+</body>
+
+</html>

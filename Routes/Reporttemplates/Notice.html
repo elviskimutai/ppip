@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PDF Result Template</title>
+    <style>
+      .logo {
+        height: 130px;
+        width: 170px;
+      }
+
+      .img-container {
+        text-align: center;
+        display: block;
+      }
+
+      .headings {
+        text-align: center;
+      }
+
+      .Container {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .Footer {
+        text-align: right;
+      }
+
+      .dotted {
+        border-bottom: 1px dashed #000000;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="Container">
+      <h2 class="headings">FOURTH SCHEDULE</h2>
+      <h3 class="headings">PART 1</h3>
+      <h3 class="headings">FORMS FOR REVIEWS</h3>
+      <h3 class="headings">FORM RB 1</h3>
+      <h3 class="headings">REPUBLIC OF KENYA</h3>
+      <h3 class="headings">PUBLIC PROCUREMENT ADMINISTRATIVE REVIEW BOARD</h3>
+      <h3 class="headings">
+        APPLICATION <b>{{ Applicationno }}</span>
+      </h3>
+      <h3 class="headings">BETWEEN</h3>
+
+      <h4 class="headings">
+        {{ ApplicantName }}.... APPLICANT
+      </h4>
+      <h3 class="headings">AND</h3>
+      <h4 class="headings">
+        ACCOUNTING OFFICER,{{ PEName }}....RESPONDENT
+      </h4>
+
+      <p>
+        Request for review of the decision of the <b>{{ PEName }}</b> of 
+        <b>{{ ApplicationDate }} </b> in the matter of
+        Tender No
+        <b>{{ TenderNo }}</b>   
+      </p>
+      <h3 class="headings">REQUEST FOR REVIEW</h3>
+      <p>
+        I/We <b class="dotted">{{ ApplicantName }}</b>,the above named
+        Applicant(s) of address: Physical address
+        <b>{{ PysicalAddress }} </b>.Fax No
+        <b>{{ Fax }}</b> Tel No
+        <b>{{ Telephone }}</b> Email
+        <b>{{ Email }}</b>, hereby request the Public
+        Procurement Administrative Review Board to review the whole/part of the
+        above mentioned decision on the following grounds,namely:-
+      </p>
+      {{#each items}}
+      <p>{{ name }}.{{ price }}</p>
+
+      {{/each}}
+      <p>
+        By the memorandum,the Applicant request the Board for an Order/orders
+        that:-
+      </p>
+
+      {{#each items}}
+      <p>{{ name }}.{{ price }}</p>
+
+      {{/each}}
+
+      <p>SIGNED<b>(Applicant) </span>.</p>
+      <p>Datede on <b>{{ ApplicationDate }} </span></p>
+      <hr />
+      <h3>FOR OFFICIAL USE ONLY</h3>
+      <p>
+        Lodged with the secretary Public Procurement Administrative ReviewBoard
+        on
+        <b>{{ ReceivedDate }} </span>
+      </p>
+      <br />
+
+      <h3>Signed</h3>
+      <h3>Board Secretary</h3>
+    </div>
+  </body>
+</html>

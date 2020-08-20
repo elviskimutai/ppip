@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PDF Result Template</title>
+    <style>
+      .logo {
+        height: 130px;
+        width: 170px;
+      }
+
+      .space {
+        line-height: 1.6;
+      }
+
+      .img-container {
+        text-align: center;
+        display: block;
+      }
+
+      .headings {
+        text-align: center;
+      }
+
+      .Container {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      h6 {
+        padding: 5px;
+        margin: 0;
+      }
+
+      .customers {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      .customers td,
+      .customers th {
+        padding: 8px;
+      }
+
+      .customers tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      .customers th {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: left;
+        background-color: #4caf50;
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="Container">
+      <span class="img-container">
+        <img class="logo" src="{{ LogoPath }}" alt="" />
+      </span>
+      <H6 class="headings">REPUBLIC OF KENYA</H6>
+      <H6 class="headings">PUBLIC PROCUREMENT ADMINISTRATIVEREVIEW BOARD</H6>
+      <H6 class="headings">SUMMARY FOR APPLICATION NO {{ Applicationno }}</H6>
+      <H6 class="headings">BETWEEN {{ ApplicantName }} AND {{ PEName }} </H6>
+      <table class="customers" cellpadding="0" cellspacing="0">
+        <th>Applicant</th>
+        <th></th>
+        {{#each Applicant}}
+        <tr>
+          <td>
+            Name
+          </td>
+          <td>{{ Name }}</td>
+        </tr>
+        <tr>
+          <td>
+            Email
+          </td>
+
+          <td>{{ Email }}</td>
+        </tr>
+        <tr>
+          <td>
+            Mobile
+          </td>
+          <td>{{ Mobile }}</td>
+        </tr>
+        <tr>
+          <td>
+            POBOX
+          </td>
+          <td>{{ POBOX }}</td>
+        </tr>
+        <tr>
+          <td>
+            Town
+          </td>
+          <td>{{ Town }}</td>
+        </tr>
+        <tr>
+          <td>
+            Website
+          </td>
+          <td>{{ Website }}</td>
+        </tr>
+        {{/each}}
+      </table>
+
+      <br />
+      <table class="customers" cellpadding="0" cellspacing="0">
+        <th>Procuring Entity</th>
+        <th></th>
+        {{#each PE}}
+        <tr>
+          <td>
+            Name
+          </td>
+          <td>{{ Name }}</td>
+        </tr>
+        <tr>
+          <td>
+            Email
+          </td>
+
+          <td>{{ Email }}</td>
+        </tr>
+        <tr>
+          <td>
+            Mobile
+          </td>
+          <td>{{ Mobile }}</td>
+        </tr>
+        <tr>
+          <td>
+            POBOX
+          </td>
+          <td>{{ POBOX }}</td>
+        </tr>
+        <tr>
+          <td>
+            Town
+          </td>
+          <td>{{ Town }}</td>
+        </tr>
+        <tr>
+          <td>
+            Website
+          </td>
+          <td>{{ Website }}</td>
+        </tr>
+        {{/each}}
+      </table>
+
+      <table class="customers" cellpadding="0" cellspacing="0">
+        <th>Tender Details</th>
+        <th></th>
+        <tr>
+          <td>TenderNo:</td>
+          <td>{{ TenderNo }}</td>
+        </tr>
+        <tr>
+          <td>TenderName:</td>
+          <td>{{ TenderName }}</td>
+        </tr>
+        <tr>
+          <td>Tender Value:</td>
+          <td>
+            {{ TenderValue }}
+          </td>
+        </tr>
+        <tr>
+          <td>FilingDate:</td>
+          <td>{{ FilingDate }}</td>
+        </tr>
+      </table>
+
+      <table class="customers" cellpadding="0" cellspacing="0">
+        <th>Tender Addendum</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <tr>
+          <td>No</td>
+          <td>StartDate</td>
+          <td>ClosingDate</td>
+          <td>Description</td>
+        </tr>
+        {#each AddedAdendums}
+        <tr>
+          <td>{{ AdendumNo }}</td>
+
+          <td>
+            {{ StartDate }}
+          </td>
+          <td>
+            {{ ClosingDate }}
+          </td>
+          <td>{{ r.Description }}</td>
+        </tr>
+        {{/each}}
+      </table>
+
+      <table class="customers" cellpadding="0" cellspacing="0">
+        <th>GROUNDS FOR APPEAL</th>
+        <th></th>
+
+        {#each ApplicationGrounds}
+        <tr>
+          <td>{{ GroundNO }}</td>
+          <td>{{{ Description }}}</td>
+        </tr>
+        {{/each}}
+      </table>
+
+      <table class="customers" cellpadding="0" cellspacing="0">
+        <th>REQUESTED ORDERS</th>
+        <th></th>
+
+        {#each Orders}
+        <tr>
+          <td>{{ GroundNO }}</td>
+          <td>{{{ Description }}}</td>
+        </tr>
+        {{/each}}
+      </table>
+
+      <table class="customers" cellpadding="0" cellspacing="0">
+        <th>FEES</th>
+        <th></th>
+        <tr>
+          <td>Fees description</td>
+          <td>Value</td>
+        </tr>
+
+        {#each Applicationfees}
+        <tr>
+          <td>{{ EntryType }}</td>
+          <td>{{ AmountDue }}</td>
+        </tr>
+        {{/each}}
+      </table>
+  <table class="customers" cellpadding="0" cellspacing="0">
+    <th>PROCURING ENTITY RESPONSE</th>
+    <th></th>
+  
+    {#each ResponseDetails}
+          <tr>
+            <td>{{ GroundNO }}</td>
+            <td>{{{ Response }}}</td>
+          </tr>
+
+        
+          {{/each}}
+        </table>
+
+    </div>
+  </body>
+</html>
