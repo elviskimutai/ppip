@@ -1,11 +1,9 @@
 var express = require("express");
-var procurementmethods = express();
+var Awardstatus = express();
 var mysql = require("mysql");
 var config = require("./../../DB");
-var Joi = require("joi");
 var con = mysql.createPool(config);
-var auth = require("./../../auth");
-procurementmethods.get("/", function (req, res) {
+Awardstatus.get("/", function (req, res) {
   con.getConnection(function (err, connection) {
     if (err) {
       res.json({
@@ -14,7 +12,7 @@ procurementmethods.get("/", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call getprocurementmethods()";
+      let sp = "call getawardstatus()";
       connection.query(sp, function (error, results, fields) {
         if (error) {
           res.json({
@@ -30,7 +28,7 @@ procurementmethods.get("/", function (req, res) {
     }
   });
 });
-procurementmethods.get("/:ID", function (req, res) {
+Awardstatus.get("/:ID", function (req, res) {
   const ID = req.params.ID;
   con.getConnection(function (err, connection) {
     if (err) {
@@ -40,7 +38,7 @@ procurementmethods.get("/:ID", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call getonetenderstatus(?)";
+      let sp = "call getoneawardstatus(?)";
       connection.query(sp, [ID], function (error, results, fields) {
         if (error) {
           res.json({
@@ -56,11 +54,11 @@ procurementmethods.get("/:ID", function (req, res) {
     }
   });
 });
-procurementmethods.post("/", function (req, res) {
+Awardstatus.post("/", function (req, res) {
   const schema = Joi.object().keys({
     code: Joi.string().required(),
     title: Joi.string().required(),
-    description: Joi.string().required(),
+    description: Joi.string().required()
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
@@ -78,7 +76,7 @@ procurementmethods.post("/", function (req, res) {
         });
       } // not connected!
       else {
-        let sp = "call saveprocurementmethods(?,?,?,?)";
+        let sp = "call saveawardstatus(?,?,?,?)";
         connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
@@ -103,11 +101,11 @@ procurementmethods.post("/", function (req, res) {
     });
   }
 });
-procurementmethods.put("/:ID", function (req, res) {
+Awardstatus.put("/:ID", function (req, res) {
   const schema = Joi.object().keys({
     code: Joi.string().required(),
     title: Joi.string().required(),
-    description: Joi.string().required(),
+    description: Joi.string().required()
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
@@ -126,7 +124,7 @@ procurementmethods.put("/:ID", function (req, res) {
         });
       } // not connected!
       else {
-        let sp = "call updateprocurementmethod(?,?,?,?,?)";
+        let sp = "call updateawardstatus(?,?,?,?,?)";
         connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
@@ -151,8 +149,9 @@ procurementmethods.put("/:ID", function (req, res) {
     });
   }
 });
-procurementmethods.delete("/:ID", function (req, res) {
+Awardstatus.delete("/:ID", function (req, res) {
   const ID = req.params.ID;
+
   let data = [ID, res.locals.user];
   con.getConnection(function (err, connection) {
     if (err) {
@@ -162,7 +161,7 @@ procurementmethods.delete("/:ID", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call deleteprocurementmethod(?,?)";
+      let sp = "call deleteawardstatus(?,?)";
       connection.query(sp, data, function (error, results, fields) {
         if (error) {
           res.json({
@@ -181,4 +180,4 @@ procurementmethods.delete("/:ID", function (req, res) {
     }
   });
 });
-module.exports = procurementmethods;
+module.exports = Awardstatus;

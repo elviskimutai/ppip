@@ -1,28 +1,23 @@
 var express = require("express");
-var committeetypes = express();
+var Procurementcategoryext = express();
 var mysql = require("mysql");
 var config = require("./../../DB");
-var Joi = require("joi");
 var con = mysql.createPool(config);
-var auth = require("./../../auth");
-committeetypes.get("/", auth.validateRole("Committee Types"), function(
-  req,
-  res
-) {
-  con.getConnection(function(err, connection) {
+Procurementcategoryext.get("/", function (req, res) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call getcommitteetypes()";
-      connection.query(sp, function(error, results, fields) {
+      let sp = "call getprocurementcategoryext()";
+      connection.query(sp, function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json(results[0]);
@@ -33,25 +28,22 @@ committeetypes.get("/", auth.validateRole("Committee Types"), function(
     }
   });
 });
-committeetypes.get("/:ID", auth.validateRole("Committee Types"), function(
-  req,
-  res
-) {
+Procurementcategoryext.get("/:ID", function (req, res) {
   const ID = req.params.ID;
-  con.getConnection(function(err, connection) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call getOneCommitteetypes(?)";
-      connection.query(sp, [ID], function(error, results, fields) {
+      let sp = "call getoneprocurementcategoryext(?)";
+      connection.query(sp, [ID], function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json(results[0]);
@@ -62,37 +54,40 @@ committeetypes.get("/:ID", auth.validateRole("Committee Types"), function(
     }
   });
 });
-committeetypes.post("/", auth.validateRole("Committee Types"), function(
-  req,
-  res
-) {
+Procurementcategoryext.post("/", function (req, res) {
   const schema = Joi.object().keys({
-    Description: Joi.string()
-      .min(3)
-      .required()
+    code: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    code: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
-    let data = [req.body.Description, res.locals.user];
-    con.getConnection(function(err, connection) {
+    let data = [
+      req.body.code,
+      req.body.title,
+      req.body.description,
+      res.locals.user,
+    ];
+    con.getConnection(function (err, connection) {
       if (err) {
         res.json({
           success: false,
-          message: err.message
+          message: err.message,
         });
       } // not connected!
       else {
-        let sp = "call Savecommitteetypes(?,?)";
-        connection.query(sp, data, function(error, results, fields) {
+        let sp = "call saveprocurementcategoryext(?,?,?,?)";
+        connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
               success: false,
-              message: error.message
+              message: error.message,
             });
           } else {
             res.json({
               success: true,
-              message: "saved"
+              message: "saved",
             });
           }
           connection.release();
@@ -103,42 +98,45 @@ committeetypes.post("/", auth.validateRole("Committee Types"), function(
   } else {
     res.json({
       success: false,
-      message: result.error.details[0].message
+      message: result.error.details[0].message,
     });
   }
 });
-committeetypes.put("/:ID", auth.validateRole("Committee Types"), function(
-  req,
-  res
-) {
+Procurementcategoryext.put("/:ID", function (req, res) {
   const schema = Joi.object().keys({
-    Description: Joi.string()
-      .min(3)
-      .required()
+    code: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    code: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
-    const ID = req.params.ID;
-    let data = [ID, req.body.Description, res.locals.user];
-    con.getConnection(function(err, connection) {
+    let data = [
+      req.params.ID,
+      req.body.code,
+      req.body.title,
+      req.body.description,
+      res.locals.user,
+    ];
+    con.getConnection(function (err, connection) {
       if (err) {
         res.json({
           success: false,
-          message: err.message
+          message: err.message,
         });
       } // not connected!
       else {
-        let sp = "call Updatecommitteetypes(?,?,?)";
-        connection.query(sp, data, function(error, results, fields) {
+        let sp = "call updateprocurementcategoryext(?,?,?,?,?)";
+        connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
               success: false,
-              message: error.message
+              message: error.message,
             });
           } else {
             res.json({
               success: true,
-              message: "updated"
+              message: "updated",
             });
           }
           connection.release();
@@ -149,36 +147,32 @@ committeetypes.put("/:ID", auth.validateRole("Committee Types"), function(
   } else {
     res.json({
       success: false,
-      message: result.error.details[0].message
+      message: result.error.details[0].message,
     });
   }
 });
-committeetypes.delete("/:ID", auth.validateRole("Committee Types"), function(
-  req,
-  res
-) {
+Procurementcategoryext.delete("/:ID", function (req, res) {
   const ID = req.params.ID;
-
   let data = [ID, res.locals.user];
-  con.getConnection(function(err, connection) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call Deletcommitteetypes(?,?)";
-      connection.query(sp, data, function(error, results, fields) {
+      let sp = "call deleteprocurementcategoryext(?,?)";
+      connection.query(sp, data, function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json({
             success: true,
-            message: "Deleted Successfully"
+            message: "Deleted Successfully",
           });
         }
         connection.release();
@@ -187,4 +181,4 @@ committeetypes.delete("/:ID", auth.validateRole("Committee Types"), function(
     }
   });
 });
-module.exports = committeetypes;
+module.exports = Procurementcategoryext;

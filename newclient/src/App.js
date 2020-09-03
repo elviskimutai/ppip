@@ -20,6 +20,7 @@ import EditProfile from "./Pages/Configurations/EditProfile";
 import ForgotPassword from "./Pages/Configurations/ForgotPassword";
 import Register from "./Pages/Configurations/register";
 import SupplierCategories from "./Pages/Configurations/SupplierCategories";
+import Externalapi from "./Pages/Configurations/Externalapi";
 
 function App() {
   let xtoken = window.sessionStorage.getItem("xtoken");
@@ -52,6 +53,7 @@ function App() {
             />
             ;
             <Route path="/SubCounties" exact component={SubCounties} />;
+            <Route path="/Externalapi" exact component={Externalapi} />;
           </Switch>
         </HashRouter>
       </div>

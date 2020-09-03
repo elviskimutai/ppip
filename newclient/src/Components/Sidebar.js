@@ -72,6 +72,7 @@ const Sidebar = () => {
   const ConfigurationModule = () => {
     return (
       <ul className="sub-menu">
+        
         {useValidateRole("Smtp", "View") ? (
           <li>
             <Link to="/Smtp">Smtp </Link>
@@ -87,9 +88,9 @@ const Sidebar = () => {
             <Link to="/Counties">Counties </Link>
           </li>
         ) : null}
-        {useValidateRole("Towns", "View") ? (
+        {useValidateRole("External api", "View") ? (
           <li>
-            <Link to="/Towns">Towns</Link>
+            <Link to="/Externalapi">Api</Link>
           </li>
         ) : null}
         {useValidateRole("Supplier Categories", "View") ? (

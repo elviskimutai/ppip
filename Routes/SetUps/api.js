@@ -1,11 +1,11 @@
 var express = require("express");
-var procurementmethods = express();
+var api = express();
 var mysql = require("mysql");
-var config = require("./../../DB");
-var Joi = require("joi");
+var config = require("../../DB");
 var con = mysql.createPool(config);
-var auth = require("./../../auth");
-procurementmethods.get("/", function (req, res) {
+var Joi = require("joi");
+var auth = require("../../auth");
+api.get("/",  function (req, res) {
   con.getConnection(function (err, connection) {
     if (err) {
       res.json({
@@ -14,7 +14,7 @@ procurementmethods.get("/", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call getprocurementmethods()";
+      let sp = "call getallapis()";
       connection.query(sp, function (error, results, fields) {
         if (error) {
           res.json({
@@ -30,7 +30,7 @@ procurementmethods.get("/", function (req, res) {
     }
   });
 });
-procurementmethods.get("/:ID", function (req, res) {
+api.get("/:ID", function (req, res) {
   const ID = req.params.ID;
   con.getConnection(function (err, connection) {
     if (err) {
@@ -40,7 +40,7 @@ procurementmethods.get("/:ID", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call getonetenderstatus(?)";
+      let sp = "call getoneapi(?)";
       connection.query(sp, [ID], function (error, results, fields) {
         if (error) {
           res.json({
@@ -56,19 +56,22 @@ procurementmethods.get("/:ID", function (req, res) {
     }
   });
 });
-procurementmethods.post("/", function (req, res) {
+api.post("/", function (req, res) {
   const schema = Joi.object().keys({
-    code: Joi.string().required(),
-    title: Joi.string().required(),
-    description: Joi.string().required(),
+    category: Joi.string().required(),
+    url: Joi.string().required(),
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+    user: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
     let data = [
-      req.body.code,
-      req.body.title,
-      req.body.description,
-      res.locals.user,
+      req.body.category,
+      req.body.url,
+      req.body.username,
+      req.body.password,
+      req.body.user
     ];
     con.getConnection(function (err, connection) {
       if (err) {
@@ -78,7 +81,7 @@ procurementmethods.post("/", function (req, res) {
         });
       } // not connected!
       else {
-        let sp = "call saveprocurementmethods(?,?,?,?)";
+        let sp = "call saveapi(?,?,?,?,?)";
         connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
@@ -103,20 +106,24 @@ procurementmethods.post("/", function (req, res) {
     });
   }
 });
-procurementmethods.put("/:ID", function (req, res) {
+api.put("/:ID", function (req, res) {
   const schema = Joi.object().keys({
-    code: Joi.string().required(),
-    title: Joi.string().required(),
-    description: Joi.string().required(),
+    category: Joi.string().required(),
+    url: Joi.string().required(),
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+    user: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
+    const ID = req.params.ID;
     let data = [
-      req.params.ID,
-      req.body.code,
-      req.body.title,
-      req.body.description,
-      res.locals.user,
+      ID,
+      req.body.category,
+      req.body.url,
+      req.body.username,
+      req.body.password,
+      req.body.user,
     ];
     con.getConnection(function (err, connection) {
       if (err) {
@@ -126,7 +133,7 @@ procurementmethods.put("/:ID", function (req, res) {
         });
       } // not connected!
       else {
-        let sp = "call updateprocurementmethod(?,?,?,?,?)";
+        let sp = "call updateapi(?,?,?,?,?,?)";
         connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
@@ -151,9 +158,9 @@ procurementmethods.put("/:ID", function (req, res) {
     });
   }
 });
-procurementmethods.delete("/:ID", function (req, res) {
+api.delete("/:ID/:user",  function (req, res) {
   const ID = req.params.ID;
-  let data = [ID, res.locals.user];
+  let data = [ID, req.params.user];
   con.getConnection(function (err, connection) {
     if (err) {
       res.json({
@@ -162,7 +169,7 @@ procurementmethods.delete("/:ID", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call deleteprocurementmethod(?,?)";
+      let sp = "call deleteapi(?,?)";
       connection.query(sp, data, function (error, results, fields) {
         if (error) {
           res.json({
@@ -172,7 +179,7 @@ procurementmethods.delete("/:ID", function (req, res) {
         } else {
           res.json({
             success: true,
-            message: "Deleted Successfully",
+            message: "deleted Successfully",
           });
         }
         connection.release();
@@ -181,4 +188,4 @@ procurementmethods.delete("/:ID", function (req, res) {
     }
   });
 });
-module.exports = procurementmethods;
+module.exports = api;

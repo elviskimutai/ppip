@@ -1,11 +1,9 @@
 var express = require("express");
-var procurementmethods = express();
+var Teamtypes = express();
 var mysql = require("mysql");
 var config = require("./../../DB");
-var Joi = require("joi");
 var con = mysql.createPool(config);
-var auth = require("./../../auth");
-procurementmethods.get("/", function (req, res) {
+Teamtypes.get("/", function (req, res) {
   con.getConnection(function (err, connection) {
     if (err) {
       res.json({
@@ -14,7 +12,7 @@ procurementmethods.get("/", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call getprocurementmethods()";
+      let sp = "call getteamtypes()";
       connection.query(sp, function (error, results, fields) {
         if (error) {
           res.json({
@@ -30,7 +28,7 @@ procurementmethods.get("/", function (req, res) {
     }
   });
 });
-procurementmethods.get("/:ID", function (req, res) {
+Teamtypes.get("/:ID", function (req, res) {
   const ID = req.params.ID;
   con.getConnection(function (err, connection) {
     if (err) {
@@ -40,7 +38,7 @@ procurementmethods.get("/:ID", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call getonetenderstatus(?)";
+      let sp = "call getoneteamtypes(?)";
       connection.query(sp, [ID], function (error, results, fields) {
         if (error) {
           res.json({
@@ -56,20 +54,14 @@ procurementmethods.get("/:ID", function (req, res) {
     }
   });
 });
-procurementmethods.post("/", function (req, res) {
+Teamtypes.post("/", function (req, res) {
   const schema = Joi.object().keys({
     code: Joi.string().required(),
-    title: Joi.string().required(),
-    description: Joi.string().required(),
+    name: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
-    let data = [
-      req.body.code,
-      req.body.title,
-      req.body.description,
-      res.locals.user,
-    ];
+    let data = [req.body.code, req.body.name, res.locals.user];
     con.getConnection(function (err, connection) {
       if (err) {
         res.json({
@@ -78,7 +70,7 @@ procurementmethods.post("/", function (req, res) {
         });
       } // not connected!
       else {
-        let sp = "call saveprocurementmethods(?,?,?,?)";
+        let sp = "call saveteamtypes(?,?,?)";
         connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
@@ -103,21 +95,14 @@ procurementmethods.post("/", function (req, res) {
     });
   }
 });
-procurementmethods.put("/:ID", function (req, res) {
+Teamtypes.put("/:ID", function (req, res) {
   const schema = Joi.object().keys({
     code: Joi.string().required(),
-    title: Joi.string().required(),
-    description: Joi.string().required(),
+    name: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
-    let data = [
-      req.params.ID,
-      req.body.code,
-      req.body.title,
-      req.body.description,
-      res.locals.user,
-    ];
+    let data = [req.params.ID, req.body.code, req.body.name, res.locals.user];
     con.getConnection(function (err, connection) {
       if (err) {
         res.json({
@@ -126,7 +111,7 @@ procurementmethods.put("/:ID", function (req, res) {
         });
       } // not connected!
       else {
-        let sp = "call updateprocurementmethod(?,?,?,?,?)";
+        let sp = "call updateteamtypes(?,?,?,?)";
         connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
@@ -151,8 +136,9 @@ procurementmethods.put("/:ID", function (req, res) {
     });
   }
 });
-procurementmethods.delete("/:ID", function (req, res) {
+Teamtypes.delete("/:ID", function (req, res) {
   const ID = req.params.ID;
+
   let data = [ID, res.locals.user];
   con.getConnection(function (err, connection) {
     if (err) {
@@ -162,7 +148,7 @@ procurementmethods.delete("/:ID", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call deleteprocurementmethod(?,?)";
+      let sp = "call deleteTeamtypes(?,?)";
       connection.query(sp, data, function (error, results, fields) {
         if (error) {
           res.json({
@@ -181,4 +167,4 @@ procurementmethods.delete("/:ID", function (req, res) {
     }
   });
 });
-module.exports = procurementmethods;
+module.exports = Teamtypes;

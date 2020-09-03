@@ -1,11 +1,9 @@
 var express = require("express");
-var procurementmethods = express();
+var Milestonestatus = express();
 var mysql = require("mysql");
 var config = require("./../../DB");
-var Joi = require("joi");
 var con = mysql.createPool(config);
-var auth = require("./../../auth");
-procurementmethods.get("/", function (req, res) {
+Milestonestatus.get("/", function (req, res) {
   con.getConnection(function (err, connection) {
     if (err) {
       res.json({
@@ -14,7 +12,7 @@ procurementmethods.get("/", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call getprocurementmethods()";
+      let sp = "call getmilestonestatus()";
       connection.query(sp, function (error, results, fields) {
         if (error) {
           res.json({
@@ -30,7 +28,7 @@ procurementmethods.get("/", function (req, res) {
     }
   });
 });
-procurementmethods.get("/:ID", function (req, res) {
+Milestonestatus.get("/:ID", function (req, res) {
   const ID = req.params.ID;
   con.getConnection(function (err, connection) {
     if (err) {
@@ -40,7 +38,7 @@ procurementmethods.get("/:ID", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call getonetenderstatus(?)";
+      let sp = "call getonemilestonestatus(?)";
       connection.query(sp, [ID], function (error, results, fields) {
         if (error) {
           res.json({
@@ -56,7 +54,7 @@ procurementmethods.get("/:ID", function (req, res) {
     }
   });
 });
-procurementmethods.post("/", function (req, res) {
+Milestonestatus.post("/", function (req, res) {
   const schema = Joi.object().keys({
     code: Joi.string().required(),
     title: Joi.string().required(),
@@ -78,7 +76,7 @@ procurementmethods.post("/", function (req, res) {
         });
       } // not connected!
       else {
-        let sp = "call saveprocurementmethods(?,?,?,?)";
+        let sp = "call savemilestonestatus(?,?,?,?)";
         connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
@@ -103,7 +101,7 @@ procurementmethods.post("/", function (req, res) {
     });
   }
 });
-procurementmethods.put("/:ID", function (req, res) {
+Milestonestatus.put("/:ID", function (req, res) {
   const schema = Joi.object().keys({
     code: Joi.string().required(),
     title: Joi.string().required(),
@@ -126,7 +124,7 @@ procurementmethods.put("/:ID", function (req, res) {
         });
       } // not connected!
       else {
-        let sp = "call updateprocurementmethod(?,?,?,?,?)";
+        let sp = "call updatemilestonestatus(?,?,?,?,?)";
         connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
@@ -151,8 +149,9 @@ procurementmethods.put("/:ID", function (req, res) {
     });
   }
 });
-procurementmethods.delete("/:ID", function (req, res) {
+Milestonestatus.delete("/:ID", function (req, res) {
   const ID = req.params.ID;
+
   let data = [ID, res.locals.user];
   con.getConnection(function (err, connection) {
     if (err) {
@@ -162,7 +161,7 @@ procurementmethods.delete("/:ID", function (req, res) {
       });
     } // not connected!
     else {
-      let sp = "call deleteprocurementmethod(?,?)";
+      let sp = "call deletemilestonestatus(?,?)";
       connection.query(sp, data, function (error, results, fields) {
         if (error) {
           res.json({
@@ -181,4 +180,4 @@ procurementmethods.delete("/:ID", function (req, res) {
     }
   });
 });
-module.exports = procurementmethods;
+module.exports = Milestonestatus;

@@ -1,25 +1,23 @@
 var express = require("express");
-var Venues = express();
+var Milestonetype = express();
 var mysql = require("mysql");
-var config = require("../../DB");
+var config = require("./../../DB");
 var con = mysql.createPool(config);
-var Joi = require("joi");
-var auth = require("../../auth");
-Venues.get("/", auth.validateRole("Venues"), function(req, res) {
-  con.getConnection(function(err, connection) {
+Milestonetype.get("/", function (req, res) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call GetAllvenues()";
-      connection.query(sp, function(error, results, fields) {
+      let sp = "call getmilestonetype()";
+      connection.query(sp, function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json(results[0]);
@@ -30,22 +28,22 @@ Venues.get("/", auth.validateRole("Venues"), function(req, res) {
     }
   });
 });
-Venues.get("/:ID", auth.validateRole("Venues"), function(req, res) {
+Milestonetype.get("/:ID", function (req, res) {
   const ID = req.params.ID;
-  con.getConnection(function(err, connection) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call GetOnevenue(?)";
-      connection.query(sp, ID, function(error, results, fields) {
+      let sp = "call getonemilestonetype(?)";
+      connection.query(sp, [ID], function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json(results[0]);
@@ -56,46 +54,40 @@ Venues.get("/:ID", auth.validateRole("Venues"), function(req, res) {
     }
   });
 });
-Venues.post("/", auth.validateRole("Venues"), function(req, res) {
+Milestonetype.post("/", function (req, res) {
   const schema = Joi.object().keys({
-    Name: Joi.string()
-
-      .min(3)
-      .required(),
-    Description: Joi.string()
-      .min(3)
-      .required(),
-    Branch: Joi.number()
-      .min(1)
-      .required()
+    code: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    code: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
     let data = [
-      req.body.Name,
-      req.body.Description,
+      req.body.code,
+      req.body.title,
+      req.body.description,
       res.locals.user,
-      req.body.Branch
     ];
-    con.getConnection(function(err, connection) {
+    con.getConnection(function (err, connection) {
       if (err) {
         res.json({
           success: false,
-          message: err.message
+          message: err.message,
         });
       } // not connected!
       else {
-        let sp = "call Savevenues(?,?,?,?)";
-        connection.query(sp, data, function(error, results, fields) {
+        let sp = "call savemilestonetype(?,?,?,?)";
+        connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
               success: false,
-              message: error.message
+              message: error.message,
             });
           } else {
             res.json({
               success: true,
-              message: "saved"
+              message: "saved",
             });
           }
           connection.release();
@@ -106,51 +98,45 @@ Venues.post("/", auth.validateRole("Venues"), function(req, res) {
   } else {
     res.json({
       success: false,
-      message: result.error.details[0].message
+      message: result.error.details[0].message,
     });
   }
 });
-Venues.put("/:ID", auth.validateRole("Venues"), function(req, res) {
+Milestonetype.put("/:ID", function (req, res) {
   const schema = Joi.object().keys({
-    Name: Joi.string()
-      .min(3)
-      .required(),
-    Branch: Joi.number()
-      .min(1)
-      .required(),
-    Description: Joi.string()
-      .min(3)
-      .required()
+    code: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    code: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
-    const ID = req.params.ID;
     let data = [
-      ID,
-      req.body.Name,
-      req.body.Description,
+      req.params.ID,
+      req.body.code,
+      req.body.title,
+      req.body.description,
       res.locals.user,
-      req.body.Branch
     ];
-    con.getConnection(function(err, connection) {
+    con.getConnection(function (err, connection) {
       if (err) {
         res.json({
           success: false,
-          message: err.message
+          message: err.message,
         });
       } // not connected!
       else {
-        let sp = "call Updatevenues(?,?,?,?,?)";
-        connection.query(sp, data, function(error, results, fields) {
+        let sp = "call updatemilestonetype(?,?,?,?,?)";
+        connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
               success: false,
-              message: error.message
+              message: error.message,
             });
           } else {
             res.json({
               success: true,
-              message: "Updated"
+              message: "updated",
             });
           }
           connection.release();
@@ -161,33 +147,32 @@ Venues.put("/:ID", auth.validateRole("Venues"), function(req, res) {
   } else {
     res.json({
       success: false,
-      message: result.error.details[0].message
+      message: result.error.details[0].message,
     });
   }
 });
-Venues.delete("/:ID", auth.validateRole("Venues"), function(req, res) {
+Milestonetype.delete("/:ID", function (req, res) {
   const ID = req.params.ID;
   let data = [ID, res.locals.user];
-
-  con.getConnection(function(err, connection) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call Deletevenues(?,?)";
-      connection.query(sp, data, function(error, results, fields) {
+      let sp = "call deletemilestonetype(?,?)";
+      connection.query(sp, data, function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json({
             success: true,
-            message: "Deleted Successfully"
+            message: "Deleted Successfully",
           });
         }
         connection.release();
@@ -196,4 +181,4 @@ Venues.delete("/:ID", auth.validateRole("Venues"), function(req, res) {
     }
   });
 });
-module.exports = Venues;
+module.exports = Milestonetype;

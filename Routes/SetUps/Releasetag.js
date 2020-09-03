@@ -1,25 +1,23 @@
 var express = require("express");
-var Branches = express();
+var Releasetag = express();
 var mysql = require("mysql");
 var config = require("./../../DB");
-var Joi = require("joi");
 var con = mysql.createPool(config);
-var auth = require("./../../auth");
-Branches.get("/", auth.validateRole("Branches"), function(req, res) {
-  con.getConnection(function(err, connection) {
+Releasetag.get("/", function (req, res) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call getBranches()";
-      connection.query(sp, function(error, results, fields) {
+      let sp = "call getreleasetag()";
+      connection.query(sp, function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json(results[0]);
@@ -30,22 +28,22 @@ Branches.get("/", auth.validateRole("Branches"), function(req, res) {
     }
   });
 });
-Branches.get("/:ID", auth.validateRole("Branches"), function(req, res) {
+Releasetag.get("/:ID", function (req, res) {
   const ID = req.params.ID;
-  con.getConnection(function(err, connection) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call getOneBranch(?)";
-      connection.query(sp, [ID], function(error, results, fields) {
+      let sp = "call getonereleasetag(?)";
+      connection.query(sp, [ID], function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json(results[0]);
@@ -56,34 +54,40 @@ Branches.get("/:ID", auth.validateRole("Branches"), function(req, res) {
     }
   });
 });
-Branches.post("/", auth.validateRole("Branches"), function(req, res) {
+Releasetag.post("/", function (req, res) {
   const schema = Joi.object().keys({
-    Description: Joi.string()
-      .min(3)
-      .required()
+    code: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    code: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
-    let data = [req.body.Description, res.locals.user];
-    con.getConnection(function(err, connection) {
+    let data = [
+      req.body.code,
+      req.body.title,
+      req.body.description,
+      res.locals.user,
+    ];
+    con.getConnection(function (err, connection) {
       if (err) {
         res.json({
           success: false,
-          message: err.message
+          message: err.message,
         });
       } // not connected!
       else {
-        let sp = "call SaveBranch(?,?)";
-        connection.query(sp, data, function(error, results, fields) {
+        let sp = "call savereleasetag(?,?,?,?)";
+        connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
               success: false,
-              message: error.message
+              message: error.message,
             });
           } else {
             res.json({
               success: true,
-              message: "saved"
+              message: "saved",
             });
           }
           connection.release();
@@ -94,39 +98,45 @@ Branches.post("/", auth.validateRole("Branches"), function(req, res) {
   } else {
     res.json({
       success: false,
-      message: result.error.details[0].message
+      message: result.error.details[0].message,
     });
   }
 });
-Branches.put("/:ID", auth.validateRole("Branches"), function(req, res) {
+Releasetag.put("/:ID", function (req, res) {
   const schema = Joi.object().keys({
-    Description: Joi.string()
-      .min(3)
-      .required()
+    code: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    code: Joi.string().required(),
   });
   const result = Joi.validate(req.body, schema);
   if (!result.error) {
-    const ID = req.params.ID;
-    let data = [ID, req.body.Description, res.locals.user];
-    con.getConnection(function(err, connection) {
+    let data = [
+      req.params.ID,
+      req.body.code,
+      req.body.title,
+      req.body.description,
+      res.locals.user,
+    ];
+    con.getConnection(function (err, connection) {
       if (err) {
         res.json({
           success: false,
-          message: err.message
+          message: err.message,
         });
       } // not connected!
       else {
-        let sp = "call UpdateBranch(?,?,?)";
-        connection.query(sp, data, function(error, results, fields) {
+        let sp = "call updatereleasetag(?,?,?,?,?)";
+        connection.query(sp, data, function (error, results, fields) {
           if (error) {
             res.json({
               success: false,
-              message: error.message
+              message: error.message,
             });
           } else {
             res.json({
               success: true,
-              message: "updated"
+              message: "updated",
             });
           }
           connection.release();
@@ -137,33 +147,32 @@ Branches.put("/:ID", auth.validateRole("Branches"), function(req, res) {
   } else {
     res.json({
       success: false,
-      message: result.error.details[0].message
+      message: result.error.details[0].message,
     });
   }
 });
-Branches.delete("/:ID", auth.validateRole("Branches"), function(req, res) {
+Releasetag.delete("/:ID", function (req, res) {
   const ID = req.params.ID;
-
   let data = [ID, res.locals.user];
-  con.getConnection(function(err, connection) {
+  con.getConnection(function (err, connection) {
     if (err) {
       res.json({
         success: false,
-        message: err.message
+        message: err.message,
       });
     } // not connected!
     else {
-      let sp = "call DeletBranch(?,?)";
-      connection.query(sp, data, function(error, results, fields) {
+      let sp = "call deletereleasetag(?,?)";
+      connection.query(sp, data, function (error, results, fields) {
         if (error) {
           res.json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         } else {
           res.json({
             success: true,
-            message: "Deleted Successfully"
+            message: "Deleted Successfully",
           });
         }
         connection.release();
@@ -172,4 +181,4 @@ Branches.delete("/:ID", auth.validateRole("Branches"), function(req, res) {
     }
   });
 });
-module.exports = Branches;
+module.exports = Releasetag;
